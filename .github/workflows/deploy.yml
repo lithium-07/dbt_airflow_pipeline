@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dbt
+        run: pip install dbt-bigquery google-auth google-auth-oauthlib
+
+      - name: Run dbt models
+        run: |
+          cd my_dbt_project
+          dbt run --profiles-dir .
+
+      - name: Deploy to GCP
+        uses: google-github-actions/deploy-appengine@v0
+        with:
+          credentials: ${{ secrets.GCP_CREDENTIALS }}
+          project_id: your-gcp-project-id

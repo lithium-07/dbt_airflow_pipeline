@@ -1,0 +1,11 @@
+bigquery_project:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: your-gcp-project-id
+      dataset: your_bigquery_dataset
+      threads: 3
+      timeout_seconds: 100
+      location: US
